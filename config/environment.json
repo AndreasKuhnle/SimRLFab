@@ -1,0 +1,5 @@
+{
+    "environment": "gym",
+    "level": "production-v0",
+    "max_episode_timesteps": 100
+}

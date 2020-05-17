@@ -1,0 +1,8 @@
+{
+    "agent": "tensorforce",
+    "update": 4,
+    "objective": "policy_gradient",
+    "reward_estimation": {
+        "horizon": 2
+    }
+}
