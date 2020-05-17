@@ -3,7 +3,7 @@ Simulation and reinforcement learning framework for production planning and cont
 
 #### Introduction
 
-## Installation
+#### Installation
 
 Required packages: 
 ```bash
