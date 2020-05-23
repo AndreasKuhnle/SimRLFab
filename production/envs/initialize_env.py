@@ -18,8 +18,8 @@ from collections import defaultdict
 
 PRINT_CONSOLE = False  # Extended print out during running, particularly for debugging
 EPSILON = 0.000001  # Small number larger than zero used as "marginal" time step or to compare values
-EXPORT_FREQUENCY = 10 ** 3
-EXPORT_NO_LOGS = False
+EXPORT_FREQUENCY = 10 ** 3  # Number of steps between csv-export of log-files
+EXPORT_NO_LOGS = False  # Turn on/off export of log-files
 
 PATH_TIME = "log/" + datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -31,7 +31,7 @@ def define_production_parameters(env, episode):
     parameters.update(({'SEED': 10}))
     random.seed(parameters['SEED'] + episode)
 
-    parameters.update({'NUM_ORDERS': 10 ** 8})
+    parameters.update({'NUM_ORDERS': 10 ** 8})  # Default: large number to not run out of orders
 
     parameters.update({'time_end': 0.0})
 
@@ -39,7 +39,7 @@ def define_production_parameters(env, episode):
     parameters.update({'step_criteria': env.event()})
     parameters.update({'continue_criteria': env.event()})
 
-    parameters.update(({'EXPONENTIAL_SMOOTHING': 0.01}))  # 0.01
+    parameters.update(({'EXPONENTIAL_SMOOTHING': 0.01}))  # Default: 0.01
     parameters.update(({'EPSILON': EPSILON}))
     parameters.update(({'PRINT_CONSOLE': PRINT_CONSOLE}))
     parameters.update(({'EXPORT_NO_LOGS': EXPORT_NO_LOGS}))
@@ -47,8 +47,9 @@ def define_production_parameters(env, episode):
     parameters.update(({'PATH_TIME': PATH_TIME}))
     parameters.update(({'EXPORT_FREQUENCY': EXPORT_FREQUENCY}))
 
-    parameters.update(({'CHANGE_SCENARIO_AFTER_EPISODES': 5 * 10 ** 10}))  # 10**2
+    parameters.update(({'CHANGE_SCENARIO_AFTER_EPISODES': 5 * 10 ** 10}))
 
+    extend_agent_parameters(parameters=parameters)
     extend_production_parameters(parameters=parameters)
 
     # Export parameter config to csv
@@ -56,16 +57,8 @@ def define_production_parameters(env, episode):
 
     return parameters
 
-def extend_production_parameters(parameters):
-    parameters.update({'NUM_TRANSP_AGENTS': 1})  # Number of transportation resources
-    parameters.update({'NUM_MACHINES': 8})  # Number of machines in the machine shop
-    parameters.update({'NUM_SOURCES': 3})
-    parameters.update({'NUM_SINKS': 3})
-    parameters.update({'NUM_RESOURCES': parameters['NUM_MACHINES'] + parameters['NUM_SOURCES'] + parameters['NUM_SINKS']})
-    parameters.update({'NUM_PROD_VARIANTS': 1})
-    parameters.update({'NUM_PROD_STEPS': 1})
-
-    # Transport parameters -> In this setting the RL-agent (TRPO-Algorithm) is controlling the transport decision making
+def extend_agent_parameters(parameters):
+    # In this setting the RL-agent (TRPO-Algorithm) is controlling the transport decision making
     parameters.update({'TRANSP_AGENT_TYPE': "TRPO"})  # Alternativen: TRPO, FIFO, NJF, EMPTY
     parameters.update({'TRANSP_AGENT_STATE': ['rel_buffer_fill_in_out', 'bin_machine_failure']})  # Alternatives: bin_buffer_fill, bin_machine_failure, bin_location, int_buffer_fill, rel_buffer_fill, rel_buffer_fill_in_out, order_waiting_time, order_waiting_time_normalized, distance_to_action, remaining_process_time, total_process_time
     parameters.update({'TRANSP_AGENT_REWARD': "utilization"})  # Alternatives: valid_action, utilization, waiting_time_normalized, throughput, conwip, const_weighted, weighted_objectives
@@ -84,6 +77,16 @@ def extend_production_parameters(parameters):
     parameters.update({'TRANSP_AGENT_CONWIP_INV': 15})  # ConWIP inventory target if conwip reward is selected
     parameters.update({'WAITING_TIME_THRESHOLD': 1000})  # Forced order transport if threshold reached
 
+def extend_production_parameters(parameters):
+    parameters.update({'NUM_TRANSP_AGENTS': 1})  # Number of transportation resources
+    parameters.update({'NUM_MACHINES': 8})  # Number of machines in the machine shop
+    parameters.update({'NUM_SOURCES': 3})
+    parameters.update({'NUM_SINKS': 3})
+    parameters.update({'NUM_RESOURCES': parameters['NUM_MACHINES'] + parameters['NUM_SOURCES'] + parameters['NUM_SINKS']})
+    parameters.update({'NUM_PROD_VARIANTS': 1})
+    parameters.update({'NUM_PROD_STEPS': 1})
+
+    # Transport parameters
     parameters.update({'TRANSP_SPEED': 1.0 * 60.0})
     parameters.update({'RESP_AREA_TRANSP': [[[True for i in range(parameters['NUM_RESOURCES'])] for j in range(parameters['NUM_RESOURCES'])] for k in range(parameters['NUM_TRANSP_AGENTS'])]})
 
@@ -93,10 +96,6 @@ def extend_production_parameters(parameters):
     parameters.update({'MTOG': [10.0, 10.0, 10.0]})  # Mean Time Order Generation
     parameters.update({'SOURCE_ORDER_GENERATION_TYPE': "ALWAYS_FILL_UP"})  # Alternatives: ALWAYS_FILL_UP, MEAN_ARRIVAL_TIME
 
-    parameters.update({'MTBF': [1000.0] * parameters['NUM_MACHINES']})  # Unscheduled breakdowns
-    parameters.update({'MTOL': [200.0] * parameters['NUM_MACHINES']})
-    parameters.update({'MACHINE_CAPACITIES': [6] * parameters['NUM_MACHINES']})  # Capacity for in and out machine buffers together
-
     # Machine parameters
     parameters.update({'MACHINE_AGENT_TYPE': "FIFO"})  # Alternatives: FIFO -> Decision rule for selecting the next available order from the load port
     parameters.update({'MACHINE_GROUPS': [2, 1, 1, 1, 1, 3, 3, 3]})
@@ -104,7 +103,10 @@ def extend_production_parameters(parameters):
     parameters.update({'MIN_PROCESS_TIME': [0.5] * parameters['NUM_MACHINES']})
     parameters.update({'AVERAGE_PROCESS_TIME': [60.0] * parameters['NUM_MACHINES']})
     parameters.update({'MAX_PROCESS_TIME': [150.0] * parameters['NUM_MACHINES']})
-    parameters.update({'CHANGEOVER_TIME': 0.0})  # Not used
+    parameters.update({'CHANGEOVER_TIME': 0.0})  # Default: Not used
+    parameters.update({'MTBF': [1000.0] * parameters['NUM_MACHINES']})  # Unscheduled breakdowns
+    parameters.update({'MTOL': [200.0] * parameters['NUM_MACHINES']})
+    parameters.update({'MACHINE_CAPACITIES': [6] * parameters['NUM_MACHINES']})  # Capacity for in and out machine buffers together
 
     # Order parameters
     parameters.update({'ORDER_DISTRIBUTION': [1.0 / parameters['NUM_MACHINES']] * parameters['NUM_MACHINES']})  # Probability which machine allocated, when orders are created
@@ -154,18 +156,12 @@ def define_production_statistics(parameters):
     statistics.update({'stat_transp_forced_idle': np.array([0] * parameters['NUM_TRANSP_AGENTS'])})
     statistics.update({'stat_transp_threshold_waiting_reached': np.array([0] * parameters['NUM_TRANSP_AGENTS'])})
 
-    statistics.update(
-        {'stat_order_sop': defaultdict(int)})
-    statistics.update(
-        {'stat_order_eop': defaultdict(int)})
-    statistics.update(
-        {'stat_order_waiting': defaultdict(int)})
-    statistics.update(
-        {'stat_order_processing': defaultdict(int)})
-    statistics.update(
-        {'stat_order_handling': defaultdict(int)})
-    statistics.update(
-        {'stat_order_leadtime': defaultdict(int)})
+    statistics.update({'stat_order_sop': defaultdict(int)})
+    statistics.update({'stat_order_eop': defaultdict(int)})
+    statistics.update({'stat_order_waiting': defaultdict(int)})
+    statistics.update({'stat_order_processing': defaultdict(int)})
+    statistics.update({'stat_order_handling': defaultdict(int)})
+    statistics.update({'stat_order_leadtime': defaultdict(int)})
 
     statistics.update(
         {'stat_order': [statistics['stat_order_sop'], statistics['stat_order_eop'], statistics['stat_order_waiting'],
