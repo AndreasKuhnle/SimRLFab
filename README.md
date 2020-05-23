@@ -69,6 +69,7 @@ By default, the sequencing and processing of orders at machines is based on a FI
 
 The default configuration provided in this package is based on a semiconductor setting presented in:
 > Kuhnle, A., Röhrig, N., & Lanza, G. (2019). "Autonomous order dispatching in the semiconductor industry using reinforcement learning", Procedia CIRP, p. 391-396
+
 > Kuhnle, A., Schäfer, L., Stricker, N., & Lanza, G. (2019). "Design, Implementation and Evaluation of Reinforcement Learning for an Adaptive Order Dispatching in Job Shop Manufacturing Systems". Procedia CIRP, p. 234-239.
 
 ## Running guide
