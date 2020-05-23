@@ -50,11 +50,7 @@ The simulation model covers the following features (`initialize_env.py`):
     - Turn on / off console printout for detailed report of simulation processes and debugging
     - Seed for random number streams
 
-![Job shop manufacturing layout](/docu/layout.png){:height="50%" width="50%"}
-
-<img src="/docu/layout.png" width="400">
-
-<img src="https://github.com/AndreasKuhnle/SimPyFab/blob/master/docu/layout.png" width="400">
+<img src="/docu/layout.png" width="500">
 
 The reinforcement learning is based on the **Tensorforce** library and allows the combination of a variety of popular deep reinforcement learning models. Further details are found in the **Tensorforce** documentation. Problem-specific configurations for the order dispatching task are the following (`initialize_env.py`):
 - State representation, i.e. which information elements are part of the state vector
