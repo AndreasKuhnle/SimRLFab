@@ -50,7 +50,9 @@ The simulation model covers the following features (`initialize_env.py`):
     - Turn on / off console printout for detailed report of simulation processes and debugging
     - Seed for random number streams
 
-<img src="/docu/layout.png" width="500" align="center">
+<p align="center"> 
+<img src="/docu/layout.png" width="500">
+</p>
 
 The reinforcement learning is based on the **Tensorforce** library and allows the combination of a variety of popular deep reinforcement learning models. Further details are found in the **Tensorforce** documentation. Problem-specific configurations for the order dispatching task are the following (`initialize_env.py`):
 - State representation, i.e. which information elements are part of the state vector
