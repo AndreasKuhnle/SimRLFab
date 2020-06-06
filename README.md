@@ -85,7 +85,7 @@ Set up and run a simulation and training experiment:
 
 ## Installation
 
-Required packages: 
+Required packages (Python 3.6): 
 ```bash
 pip install -r requirements.txt
 ```
