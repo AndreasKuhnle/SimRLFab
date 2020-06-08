@@ -209,7 +209,7 @@ class ProductionEnv(Environment):
                         # Process interrupted by breakdown
                         if self.resources['machines'][mach].last_broken_start > self.resources['machines'][mach].last_process_start and self.resources['machines'][mach].last_broken_start + self.resources['machines'][mach].last_broken_time < self.env.now:
                             self.stat_episode_diff[stat][mach] = self.statistics[stat][mach] - self.stat_episode[stat][mach] - self.resources['machines'][mach].last_process_time + (self.env.now - self.resources['machines'][mach].last_process_start) - self.resources['machines'][mach].last_broken_time
-                            self.resources['machines'][mach].last_process_time -= (self.env.now - self.resources['machines'][mach].last_process_start) + self.resources['machines'][mach].last_broken_time
+                            self.resources['machines'][mach].last_process_time -= (self.env.now - self.resources['machines'][mach].last_process_start) - self.resources['machines'][mach].last_broken_time
                             self.resources['machines'][mach].last_process_start = self.env.now
                         else:
                             self.stat_episode_diff[stat][mach] = self.statistics[stat][mach] - self.stat_episode[stat][mach] - self.resources['machines'][mach].last_process_time + (self.env.now - self.resources['machines'][mach].last_process_start)
