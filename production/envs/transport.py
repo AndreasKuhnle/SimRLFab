@@ -364,7 +364,7 @@ class Transport(Resource):
                 if mach.buffer_processing != None:
                     state[mach.id] = mach.last_process_time - (self.env.now - mach.last_process_start)
                 for order in mach.buffer_in:
-                    state[mach.id] = min(self.parameters['MAX_PROCESS_TIME'][mach.id], max(self.parameters['MIN_PROCESS_TIME'][mach.id], self.time_calc.randomStreams["process_time"][mach.id].exponential(scale=self.parameters['AVERAGE_PROCESS_TIME'][mach.id])))
+                    state[mach.id] += min(self.parameters['MAX_PROCESS_TIME'][mach.id], max(self.parameters['MIN_PROCESS_TIME'][mach.id], self.time_calc.randomStreams["process_time"][mach.id].exponential(scale=self.parameters['AVERAGE_PROCESS_TIME'][mach.id])))
             for loc in range(len(state)):
                 if self.statistics['stat_machines_processed_orders'][loc] > 0.0:
                     state[loc] = state[loc] / (self.resources['machines'][loc].capacity * (self.statistics['stat_machines_working'][loc] / self.statistics['stat_machines_processed_orders'][loc]))
