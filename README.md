@@ -98,3 +98,7 @@ pip install -r requirements.txt
 - Alternative strategies for order sequencing and processing at machines
 - Mutliple RL-agents for several production control tasks
 - etc.
+
+## Acknowledgments
+
+We extend our sincere thanks to the German Federal Ministry of Education and Research (BMBF) for supporting this research (reference nr.: 02P14B161).
